@@ -7,16 +7,20 @@ import { ExternalLink, FolderGit2, Mail, Download, FileText, Award, GraduationCa
 const BOOT_LINES = [
   'ACCESS_TERMINAL v2.6',
   'Initializing secure session...',
-  'Verifying credentials... OK',
+  'Verifying credentials...',
   'Loading profile: B. GREENE',
   'Clearance level: VISITOR',
-  'Decrypting portfolio...',
-  'Access granted.',
+  'Awaiting authorization...',
 ]
+
+const ACCESS_CODE = 'odu'
 
 function BootSequence({ onDone }: { onDone: () => void }) {
   const [lineCount, setLineCount] = useState(0)
+  const [phase, setPhase] = useState<'print' | 'prompt' | 'denied' | 'granted'>('print')
+  const [code, setCode] = useState('')
   const [exiting, setExiting] = useState(false)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -29,18 +33,35 @@ function BootSequence({ onDone }: { onDone: () => void }) {
     BOOT_LINES.forEach((_, i) => {
       timers.push(setTimeout(() => setLineCount(i + 1), 220 * i + 150))
     })
-    const finish = setTimeout(() => setExiting(true), 220 * BOOT_LINES.length + 650)
-    const skip = () => setExiting(true)
-    window.addEventListener('keydown', skip)
-    window.addEventListener('click', skip)
+    const toPrompt = setTimeout(() => setPhase('prompt'), 220 * BOOT_LINES.length + 500)
+    const skipAll = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setExiting(true)
+    }
+    window.addEventListener('keydown', skipAll)
     return () => {
       timers.forEach(clearTimeout)
-      clearTimeout(finish)
-      window.removeEventListener('keydown', skip)
-      window.removeEventListener('click', skip)
+      clearTimeout(toPrompt)
+      window.removeEventListener('keydown', skipAll)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (phase === 'prompt') inputRef.current?.focus()
+  }, [phase])
+
+  const submit = () => {
+    if (code.trim().toLowerCase() === ACCESS_CODE) {
+      setPhase('granted')
+      setTimeout(() => setExiting(true), 750)
+    } else {
+      setPhase('denied')
+      setCode('')
+      setTimeout(() => setPhase('prompt'), 900)
+    }
+  }
+
+  const showPrompt = phase === 'prompt' || phase === 'denied' || phase === 'granted'
 
   return (
     <motion.div
@@ -52,16 +73,41 @@ function BootSequence({ onDone }: { onDone: () => void }) {
     >
       <div className="font-mono text-sm md:text-base text-left w-full max-w-md">
         {BOOT_LINES.slice(0, lineCount).map((line, i) => (
-          <p
-            key={line}
-            className={
-              i === BOOT_LINES.length - 1 ? 'text-seal font-bold mt-1' : 'text-bone/80'
-            }
-          >
+          <p key={line} className="text-bone/80">
             {i === 0 ? <span className="text-paper">{line}</span> : line}
           </p>
         ))}
-        <span className="boot-cursor inline-block w-2.5 h-4 bg-seal align-middle mt-1" />
+        {phase === 'print' && (
+          <span className="boot-cursor inline-block w-2.5 h-4 bg-seal align-middle mt-1" />
+        )}
+
+        {showPrompt && (
+          <div className="mt-2 flex items-center gap-2 text-gold">
+            <span>ENTER ACCESS CODE:</span>
+            <input
+              ref={inputRef}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') submit()
+              }}
+              disabled={phase !== 'prompt' && phase !== 'denied'}
+              autoCapitalize="characters"
+              autoComplete="off"
+              spellCheck={false}
+              aria-label="Access code"
+              style={{ caretColor: 'var(--color-seal)' }}
+              className="bg-transparent border-b border-gold/50 text-paper tracking-[0.2em] uppercase focus:outline-none focus:border-gold w-28"
+            />
+          </div>
+        )}
+        {phase === 'denied' && (
+          <p className="text-seal text-xs mt-1">ACCESS DENIED. RETRY.</p>
+        )}
+        {phase === 'granted' && (
+          <p className="text-seal font-bold mt-2">Access granted. Decrypting portfolio...</p>
+        )}
+        <p className="text-bone/30 text-[0.65em] mt-4 tracking-wide">esc to skip</p>
       </div>
     </motion.div>
   )
