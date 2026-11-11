@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
-import { ExternalLink, FolderGit2, Mail, Download, FileText } from 'lucide-react'
+import { ExternalLink, FolderGit2, Mail, Download, FileText, Award, GraduationCap } from 'lucide-react'
 
 const BOOT_LINES = [
   'ACCESS_TERMINAL v2.6',
@@ -161,8 +161,300 @@ const navLinks = [
   { href: '#projects', label: 'Projects' },
   { href: '#experience', label: 'Experience' },
   { href: '#resume', label: 'Resume' },
+  { href: '#works', label: 'Works' },
   { href: '#contact', label: 'Contact' },
 ]
+
+type WorkDoc = {
+  title: string
+  meta: string
+  file: string
+  format: 'PDF' | 'PPTX' | 'DOCX'
+  credit?: string
+}
+
+const PAPERS: WorkDoc[] = [
+  {
+    title: 'Security Policy Paper',
+    meta: 'Cybersecurity Policy Writing',
+    file: '/works/security-policy-paper.docx',
+    format: 'DOCX',
+  },
+  {
+    title: 'Cybersecurity and the Social Sciences',
+    meta: 'CYSE 200T · Oct 2026',
+    file: '/works/cybersec-and-social-sciences.pptx',
+    format: 'PPTX',
+  },
+  {
+    title: 'Criminology APA Research Report',
+    meta: 'CRJS 215S · Aug 2026',
+    file: '/works/crjs-apa-report.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Wo De Shenghuo (我的生活) — "My Life"',
+    meta: 'Mandarin Chinese Language Project · Jun 2026',
+    file: '/works/wo-de-shenghuo.pptx',
+    format: 'PPTX',
+  },
+  {
+    title: 'Mandarin Final Presentation',
+    meta: 'Chinese Language Final Project · Jun 2026',
+    file: '/works/mandarin-final-presentation.pptx',
+    format: 'PPTX',
+  },
+  {
+    title: 'Dialogue Script (Chinese)',
+    meta: 'CHIN 120 · May 2024',
+    file: '/works/chin120-dialogue-script.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Dialogue Script (English Translation)',
+    meta: 'CHIN 120 · May 2024',
+    file: '/works/chin120-dialogue-script-english.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'NSLI-Y Korean Dialogue Script',
+    meta: 'NSLI-Y Korean Language Program · Final Script',
+    file: '/works/nsliy-korean-script.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Holidays in Mexico',
+    meta: 'Spanish Language Coursework',
+    file: '/works/spanish-midterm-holidays.pptx',
+    format: 'PPTX',
+    credit: 'with Xavier McInturff',
+  },
+  {
+    title: 'The Uses of Tener',
+    meta: 'Spanish Language Coursework',
+    file: '/works/spanish-final-tener.pptx',
+    format: 'PPTX',
+  },
+  {
+    title: 'Newport News Housing Hub Presentation',
+    meta: 'Teamship Hampton Roads · Prepared for the Director of Housing & Neighborhood Services',
+    file: '/works/newport-news-housing-hub-presentation.pptx',
+    format: 'PPTX',
+  },
+  {
+    title: 'Housing Hub Team Research Document',
+    meta: 'Teamship Hampton Roads · Team 2 Collaborative Research',
+    file: '/works/housing-hub-team-research.pdf',
+    format: 'PDF',
+    credit: 'with Jastiasia, Christiney Ponton, Cat Greene & Andy',
+  },
+]
+
+const RECOMMENDATIONS: WorkDoc[] = [
+  {
+    title: 'Letter of Recommendation',
+    meta: 'Scholarship Recommendation Materials',
+    file: '/works/letter-of-recommendation.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Recommendation Write-Up',
+    meta: 'Scholarship Recommendation Materials',
+    file: '/works/recommendation-write-up.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'General Information for Recommenders',
+    meta: 'Background Packet for Recommenders',
+    file: '/works/info-for-recommenders.docx',
+    format: 'DOCX',
+  },
+]
+
+const SYLLABI: WorkDoc[] = [
+  {
+    title: 'CYSE 200: Cybersecurity, Innovation & Society',
+    meta: 'Old Dominion University · Fall 2026',
+    file: '/works/syllabus-cyse200.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'CHIN 120: Chinese II',
+    meta: 'Old Dominion University · Fall 2026',
+    file: '/works/syllabus-chin120.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'HIS 101: Western Civilization',
+    meta: 'Tidewater Community College · Fall 2026',
+    file: '/works/syllabus-his101.docx',
+    format: 'DOCX',
+  },
+]
+
+const WORK_TABS = [
+  { key: 'papers', label: 'School Papers', icon: FileText, docs: PAPERS },
+  { key: 'recommendations', label: 'Recommendation Materials', icon: Award, docs: RECOMMENDATIONS },
+  { key: 'syllabuses', label: 'Syllabuses', icon: GraduationCap, docs: SYLLABI },
+] as const
+
+/** A document card that starts "classified" (redacted title + stamp) and declassifies
+ *  itself shortly after scrolling into view, revealing the real title. PPTX/DOCX files
+ *  open an inline slide/doc viewer on click; PDFs open directly in a new tab. */
+function WorkCard({
+  doc,
+  index = 0,
+  onPreview,
+}: {
+  doc: WorkDoc
+  index?: number
+  onPreview: (doc: WorkDoc) => void
+}) {
+  const [declassified, setDeclassified] = useState(false)
+  const isViewable = doc.format === 'PPTX' || doc.format === 'DOCX'
+
+  const cardInner = (
+    <>
+      <span
+        className={`pointer-events-none absolute -top-2.5 -right-3 border-2 border-seal text-seal font-mono font-bold text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rotate-[-7deg] bg-ink-soft transition-all duration-500 ${
+          declassified ? 'opacity-0 scale-110' : 'opacity-90 scale-100'
+        }`}
+        aria-hidden="true"
+      >
+        Classified
+      </span>
+
+      <span className="mt-0.5 shrink-0 w-9 h-9 flex items-center justify-center border border-gold/40 text-gold text-[10px] font-bold tracking-wide">
+        {doc.format}
+      </span>
+
+      <span className="flex-1 min-w-0">
+        <span className="relative block">
+          <span className="block font-serif text-base font-semibold text-paper group-hover:text-gold transition-colors">
+            {doc.title}
+          </span>
+          <span
+            className={`absolute inset-0 bg-ink-soft border-l-2 border-seal flex items-center overflow-hidden px-2 font-mono text-[10px] tracking-[0.2em] text-bone/40 origin-right transition-transform duration-700 ease-out ${
+              declassified ? 'scale-x-0' : 'scale-x-100'
+            }`}
+            aria-hidden="true"
+          >
+            &#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;
+          </span>
+        </span>
+        <span className="block text-sm text-bone/70 mt-1">
+          {doc.meta}
+          {doc.credit && <span className="block text-bone/50 text-xs mt-0.5">{doc.credit}</span>}
+        </span>
+      </span>
+
+      {isViewable ? (
+        <a
+          href={doc.file}
+          download
+          onClick={(e) => e.stopPropagation()}
+          title="Download original file"
+          className="shrink-0 mt-1 text-bone/40 hover:text-gold transition-colors"
+        >
+          <Download className="w-4 h-4" />
+        </a>
+      ) : (
+        <Download className="w-4 h-4 text-bone/40 group-hover:text-gold transition-colors shrink-0 mt-1" />
+      )}
+    </>
+  )
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-80px' }}
+      variants={fadeUp}
+      onViewportEnter={() => {
+        setTimeout(() => setDeclassified(true), 550 + index * 160)
+      }}
+    >
+      {isViewable ? (
+        <button
+          type="button"
+          onClick={() => onPreview(doc)}
+          className="group relative flex items-start gap-4 border border-white/10 bg-ink-soft p-5 hover:border-gold/60 transition-colors text-left w-full"
+        >
+          {cardInner}
+        </button>
+      ) : (
+        <a
+          href={doc.file}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative flex items-start gap-4 border border-white/10 bg-ink-soft p-5 hover:border-gold/60 transition-colors"
+        >
+          {cardInner}
+        </a>
+      )}
+    </motion.div>
+  )
+}
+
+/** Full-screen viewer for PPTX/DOCX documents, rendered via Microsoft's Office web viewer. */
+function WorkPreviewModal({ doc, onClose }: { doc: WorkDoc | null; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {doc && (
+        <motion.div
+          className="fixed inset-0 z-[90] bg-ink/95 backdrop-blur-sm flex items-center justify-center p-3 md:p-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div
+            className="relative w-full max-w-5xl h-full md:h-[85vh] bg-ink-soft border border-gold/30 flex flex-col"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 px-5 py-4 border-b border-white/10">
+              <div className="min-w-0">
+                <p className="font-serif text-paper font-semibold truncate">{doc.title}</p>
+                <p className="text-bone/60 text-xs mt-0.5">{doc.meta}</p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <a
+                  href={doc.file}
+                  download
+                  className="text-xs font-bold tracking-[0.1em] uppercase text-gold hover:text-gold-soft transition-colors inline-flex items-center gap-1.5"
+                >
+                  <Download className="w-3.5 h-3.5" /> Download
+                </a>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="text-bone/60 hover:text-seal transition-colors text-xl leading-none px-1"
+                  aria-label="Close preview"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 bg-paper">
+              <iframe
+                key={doc.file}
+                title={doc.title}
+                src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+                  `${window.location.origin}${doc.file}`
+                )}`}
+                className="w-full h-full border-0"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
 
 const btnPrimary =
   'inline-flex items-center gap-2 px-6 py-3 bg-seal text-paper font-semibold rounded-sm hover:bg-seal-deep transition-colors'
@@ -171,6 +463,9 @@ const btnOutlineDark =
 
 export default function App() {
   const [booted, setBooted] = useState(false)
+  const [workTab, setWorkTab] = useState<(typeof WORK_TABS)[number]['key']>('papers')
+  const activeWorkTab = WORK_TABS.find((t) => t.key === workTab) ?? WORK_TABS[0]
+  const [previewDoc, setPreviewDoc] = useState<WorkDoc | null>(null)
 
   return (
     <div className="min-h-screen bg-ink text-bone overflow-x-hidden font-sans">
@@ -198,7 +493,7 @@ export default function App() {
       </header>
 
       {/* HERO */}
-      <section id="top" className="relative px-6 md:px-12 pt-24 md:pt-32 pb-28 md:pb-36 bg-ink overflow-hidden">
+      <section id="top" className="gold-dust relative px-6 md:px-12 pt-24 md:pt-32 pb-28 md:pb-36 bg-ink overflow-hidden">
         <div className="absolute left-6 md:left-12 top-32 bottom-20 w-px bg-seal/30 hidden md:block" />
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -211,6 +506,7 @@ export default function App() {
             <span className="text-seal font-bold tracking-[0.3em] uppercase text-xs">
               Old Dominion University &middot; Cybersecurity
             </span>
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
           </motion.div>
 
           <div className="relative md:pl-10">
@@ -272,8 +568,9 @@ export default function App() {
                 </h2>
               </div>
             </div>
-            <div className="space-y-4 text-charcoal leading-relaxed">
-              <p>
+            <span className="block w-14 h-px bg-gold mb-6" />
+            <div className="space-y-4 text-charcoal leading-relaxed text-[1.05rem]">
+              <p className="drop-cap">
                 Hi, I'm Briannah. I'm a cybersecurity senior at Old Dominion University
                 (3.94 GPA, graduating May 2027), pursuing the accelerated
                 bachelor's-to-master's track with a minor in Mandarin Chinese. I earned
@@ -368,7 +665,7 @@ export default function App() {
                   <h3 className="font-serif text-lg font-semibold text-paper mb-3">
                     {group.title}
                   </h3>
-                  <ul className="space-y-1.5 text-sm text-bone/80">
+                  <ul className="space-y-1.5 text-base text-bone/90">
                     {group.items.map((it) => (
                       <li key={it}>{it}</li>
                     ))}
@@ -557,7 +854,7 @@ export default function App() {
                       <h3 className="font-serif text-lg font-semibold text-paper">{e.title}</h3>
                     </div>
                     <p className="text-seal text-sm font-semibold mb-2">{e.org}</p>
-                    <p className="text-bone/80 text-sm leading-relaxed">{e.desc}</p>
+                    <p className="text-bone/90 text-base leading-relaxed">{e.desc}</p>
                   </div>
                 </div>
               </Reveal>
@@ -617,6 +914,57 @@ export default function App() {
           </Reveal>
         </div>
       </section>
+
+      {/* WORKS */}
+      <section id="works" className="gold-dust px-6 md:px-12 py-24 md:py-32 bg-ink">
+        <div className="max-w-5xl mx-auto">
+          <Reveal className="flex items-baseline gap-4 mb-10">
+            <SectionMark n="06" tone="ink" />
+            <div>
+              <Eyebrow>Portfolio Library</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl font-semibold text-paper">
+                Works &amp; Documentation
+              </h2>
+              <p className="text-bone/70 mt-3 max-w-xl">
+                School papers, presentations, recommendation materials, and course
+                syllabi, all in one place. Click any item to view or download it.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="flex flex-wrap gap-2 mb-8 border-b border-white/10 pb-6">
+              {WORK_TABS.map((tab) => {
+                const Icon = tab.icon
+                const active = tab.key === workTab
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setWorkTab(tab.key)}
+                    className={`inline-flex items-center gap-2 px-4 py-2 text-xs font-bold tracking-[0.1em] uppercase border transition-colors ${
+                      active
+                        ? 'bg-gold text-ink border-gold'
+                        : 'border-white/15 text-bone/70 hover:border-gold/50 hover:text-gold'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </button>
+                )
+              })}
+            </div>
+          </Reveal>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {activeWorkTab.docs.map((doc, i) => (
+              <WorkCard key={doc.title} doc={doc} index={i} onPreview={setPreviewDoc} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WorkPreviewModal doc={previewDoc} onClose={() => setPreviewDoc(null)} />
 
       {/* CONTACT */}
       <section id="contact" className="relative px-6 md:px-12 py-28 md:py-36 bg-ink overflow-hidden">

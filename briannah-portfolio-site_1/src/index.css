@@ -10,9 +10,15 @@
   --color-charcoal: #3c3630;
   --color-seal: #c22a2f;
   --color-seal-deep: #8c1b1f;
+  --color-gold: #c9a24a;
+  --color-gold-soft: #e3c87c;
   --font-serif: 'Fraunces', ui-serif, Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+  font-size: 17.5px;
 }
 
 @keyframes blink-cursor {
@@ -60,4 +66,40 @@ body {
 
 .hanging-quote {
   margin-left: -0.5ch;
+}
+
+/* scattered gold speckle texture, used as a decorative accent layer */
+.gold-dust {
+  position: relative;
+  isolation: isolate;
+}
+.gold-dust::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 20%, var(--color-gold) 0%, transparent 60%),
+    radial-gradient(1px 1px at 22% 62%, var(--color-gold-soft) 0%, transparent 60%),
+    radial-gradient(2px 2px at 38% 12%, var(--color-gold) 0%, transparent 60%),
+    radial-gradient(1px 1px at 54% 78%, var(--color-gold-soft) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 68% 34%, var(--color-gold) 0%, transparent 60%),
+    radial-gradient(1px 1px at 81% 58%, var(--color-gold-soft) 0%, transparent 60%),
+    radial-gradient(2px 2px at 92% 15%, var(--color-gold) 0%, transparent 60%),
+    radial-gradient(1px 1px at 15% 88%, var(--color-gold) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 72% 90%, var(--color-gold-soft) 0%, transparent 60%);
+  background-repeat: no-repeat;
+}
+
+/* gold drop cap for a lead paragraph */
+.drop-cap::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 3.4em;
+  line-height: 0.78;
+  float: left;
+  padding-right: 0.08em;
+  padding-top: 0.04em;
+  color: var(--color-gold);
 }
