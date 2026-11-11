@@ -49,6 +49,75 @@ body {
   color: var(--color-paper);
 }
 
+/* --- Glitch trail cursor --- */
+@media (pointer: fine) and (hover: hover) {
+  body.glitch-cursor-active,
+  body.glitch-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+.glitch-cursor-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.glitch-core {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  transform: translate(-100px, -100px);
+  mix-blend-mode: difference;
+  will-change: transform, opacity;
+}
+.glitch-core::before,
+.glitch-core::after {
+  content: '';
+  position: absolute;
+  background: var(--color-paper);
+  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+}
+.glitch-core::before {
+  width: 1.5px;
+  height: 16px;
+}
+.glitch-core::after {
+  width: 16px;
+  height: 1.5px;
+}
+
+.glitch-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px;
+  opacity: 0;
+  transform: translate(-100px, -100px);
+  will-change: transform, opacity;
+  mix-blend-mode: screen;
+}
+.glitch-ghost-0 {
+  background: var(--color-seal);
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+.glitch-ghost-1 {
+  background: var(--color-paper);
+  clip-path: polygon(0 40%, 100% 40%, 100% 65%, 0 65%);
+}
+.glitch-ghost-2 {
+  background: var(--color-gold);
+  clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%);
+}
+
 /* subtle paper-grain texture, used on light sections */
 .grain {
   position: relative;

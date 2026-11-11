@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, FolderGit2, Mail, Download, FileText, Award, GraduationCap, Camera, ShieldCheck, Link2 } from 'lucide-react'
 
 const BOOT_LINES = [
@@ -585,6 +585,78 @@ const btnPrimary =
 const btnOutlineDark =
   'inline-flex items-center gap-2 px-6 py-3 border border-bone/30 text-paper font-semibold rounded-sm hover:border-seal hover:text-seal transition-colors'
 
+const GHOST_COUNT = 6
+const GHOST_SPACING = 3
+
+function GlitchCursor() {
+  const coreRef = useRef<HTMLDivElement | null>(null)
+  const ghostRefs = useRef<(HTMLDivElement | null)[]>([])
+  const mouse = useRef({ x: -100, y: -100 })
+  const visible = useRef(false)
+  const history = useRef<{ x: number; y: number }[]>([])
+  const rafId = useRef<number | null>(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(pointer: fine) and (hover: hover)')
+    if (!mq.matches) return
+
+    const onMove = (e: MouseEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY }
+      visible.current = true
+    }
+    const onLeave = () => {
+      visible.current = false
+    }
+    window.addEventListener('mousemove', onMove)
+    document.documentElement.addEventListener('mouseleave', onLeave)
+    document.body.classList.add('glitch-cursor-active')
+
+    const maxLen = GHOST_COUNT * GHOST_SPACING + 1
+
+    const tick = () => {
+      history.current.unshift({ ...mouse.current })
+      if (history.current.length > maxLen) history.current.length = maxLen
+
+      const op = visible.current ? 1 : 0
+      if (coreRef.current) {
+        coreRef.current.style.transform = `translate(${mouse.current.x}px, ${mouse.current.y}px)`
+        coreRef.current.style.opacity = String(op)
+      }
+      ghostRefs.current.forEach((el, i) => {
+        if (!el) return
+        const idx = Math.min((i + 1) * GHOST_SPACING, history.current.length - 1)
+        const p = history.current[idx] ?? mouse.current
+        el.style.transform = `translate(${p.x}px, ${p.y}px)`
+        el.style.opacity = String(op * Math.max(0, 1 - (i + 1) / (GHOST_COUNT + 1)))
+      })
+      rafId.current = requestAnimationFrame(tick)
+    }
+    rafId.current = requestAnimationFrame(tick)
+
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      document.documentElement.removeEventListener('mouseleave', onLeave)
+      document.body.classList.remove('glitch-cursor-active')
+      if (rafId.current) cancelAnimationFrame(rafId.current)
+    }
+  }, [])
+
+  return (
+    <div className="glitch-cursor-root" aria-hidden="true">
+      {Array.from({ length: GHOST_COUNT }).map((_, i) => (
+        <div
+          key={i}
+          ref={(el) => {
+            ghostRefs.current[i] = el
+          }}
+          className={`glitch-ghost glitch-ghost-${i % 3}`}
+        />
+      ))}
+      <div ref={coreRef} className="glitch-core" />
+    </div>
+  )
+}
+
 export default function App() {
   const [booted, setBooted] = useState(false)
   const [workTab, setWorkTab] = useState<(typeof WORK_TABS)[number]['key']>('papers')
@@ -593,6 +665,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-ink text-bone overflow-x-hidden font-sans">
+      <GlitchCursor />
       <AnimatePresence>
         {!booted && <BootSequence onDone={() => setBooted(true)} />}
       </AnimatePresence>
