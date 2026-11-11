@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
-import { ExternalLink, FolderGit2, Mail, Download, FileText, Award, GraduationCap } from 'lucide-react'
+import { ExternalLink, FolderGit2, Mail, Download, FileText, Award, GraduationCap, Camera, ShieldCheck, Link2 } from 'lucide-react'
 
 const BOOT_LINES = [
   'ACCESS_TERMINAL v2.6',
@@ -162,6 +162,7 @@ const navLinks = [
   { href: '#experience', label: 'Experience' },
   { href: '#resume', label: 'Resume' },
   { href: '#works', label: 'Works' },
+  { href: '#photography', label: 'Photography' },
   { href: '#contact', label: 'Contact' },
 ]
 
@@ -182,18 +183,18 @@ const PAPERS: WorkDoc[] = [
   },
   {
     title: 'Cybersecurity and the Social Sciences',
-    meta: 'CYSE 200T · Oct 2026',
+    meta: 'Cybersecurity and the Social Sciences · Oct 2026',
     file: '/works/cybersec-and-social-sciences.pptx',
     format: 'PPTX',
   },
   {
     title: 'Criminology APA Research Report',
-    meta: 'CRJS 215S · Aug 2026',
+    meta: 'Introduction to Criminology · Aug 2026',
     file: '/works/crjs-apa-report.pdf',
     format: 'PDF',
   },
   {
-    title: 'Wo De Shenghuo (我的生活) — "My Life"',
+    title: 'Wo De Shenghuo (我的生活): "My Life"',
     meta: 'Mandarin Chinese Language Project · Jun 2026',
     file: '/works/wo-de-shenghuo.pptx',
     format: 'PPTX',
@@ -206,13 +207,13 @@ const PAPERS: WorkDoc[] = [
   },
   {
     title: 'Dialogue Script (Chinese)',
-    meta: 'CHIN 120 · May 2024',
+    meta: 'Chinese II · May 2024',
     file: '/works/chin120-dialogue-script.pdf',
     format: 'PDF',
   },
   {
     title: 'Dialogue Script (English Translation)',
-    meta: 'CHIN 120 · May 2024',
+    meta: 'Chinese II · May 2024',
     file: '/works/chin120-dialogue-script-english.pdf',
     format: 'PDF',
   },
@@ -284,11 +285,98 @@ const SYLLABI: WorkDoc[] = [
     file: '/works/syllabus-chin120.pdf',
     format: 'PDF',
   },
+]
+
+const CERTIFICATIONS: WorkDoc[] = [
   {
-    title: 'HIS 101: Western Civilization',
-    meta: 'Tidewater Community College · Fall 2026',
-    file: '/works/syllabus-his101.docx',
+    title: 'Standard Diploma',
+    meta: 'Commonwealth of Virginia · Virginia Beach City Public Schools, Ocean Lakes High School · Jun 2023',
+    file: '/works/standard-diploma-ocean-lakes.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Aspirations in Computing Award',
+    meta: 'National Center for Women & Information Technology (NCWIT), Virginia/DC Affiliate · 2023',
+    file: '/works/ncwit-aspirations-in-computing-2023.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'GenCyber Certificate of Award',
+    meta: 'National Security Agency (NSA) & Old Dominion University GenCyber Program · Jul 2022',
+    file: '/works/nsa-odu-gencyber-certificate-of-award.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Cybersecurity Virtual Experience Program',
+    meta: 'Forage, Mastercard & the NY Jobs CEO Council · Jun 2022',
+    file: '/works/forage-mastercard-cybersecurity-program.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Shields Up: Cybersecurity Virtual Experience Program',
+    meta: 'Forage, AIG & the NY Jobs CEO Council · Jun 2022',
+    file: '/works/forage-aig-shields-up-cybersecurity-program.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'SANS Foundations Certificate of Completion',
+    meta: 'SANS Institute · 38 CPE Credits · Jun 2022',
+    file: '/works/sans-foundations-certificate.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'NSLI-Y Korean Program Certificate of Completion',
+    meta: 'U.S. Department of State, National Security Language Initiative for Youth (NSLI-Y) · Fall 2022',
+    file: '/works/nsli-y-korean-certificate.docx',
     format: 'DOCX',
+  },
+  {
+    title: 'Scholastic Excellence Medal',
+    meta: 'The American Legion, Post 310 · Churchland High School · May 2022',
+    file: '/works/american-legion-scholastic-excellence-medal.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Certificate of Membership',
+    meta: 'Distributive Education Clubs of America (DECA) · Churchland High School · May 2022',
+    file: '/works/deca-certificate-of-membership.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Introduction to Cybersecurity Course',
+    meta: 'Girls Who Code · 2022',
+    file: '/works/girls-who-code-intro-to-cybersecurity.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Future Agents in Training Program',
+    meta: 'Federal Bureau of Investigation (FBI) · 2022',
+    file: '/works/fbi-future-agents-in-training.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'National Workplace Readiness Skills Certification',
+    meta: 'Career and Technical Education Consortium of States (CTECS) · Mar 2022',
+    file: '/works/ctecs-national-workplace-readiness-certification.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Lance Corporal Appointment',
+    meta: "United States Marine Corps Junior Reserve Officers' Training Corps (JROTC) · Churchland High School · Dec 2021",
+    file: '/works/jrotc-lance-corporal-appointment.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'Private First Class Appointment',
+    meta: "United States Marine Corps Junior Reserve Officers' Training Corps (JROTC) · Churchland High School · Oct 2021",
+    file: '/works/jrotc-private-first-class-appointment.pdf',
+    format: 'PDF',
+  },
+  {
+    title: 'FAB Camp Certificate of Completion',
+    meta: "Athena Racing · 2020",
+    file: '/works/athena-racing-fab-camp.pdf',
+    format: 'PDF',
   },
 ]
 
@@ -296,7 +384,43 @@ const WORK_TABS = [
   { key: 'papers', label: 'School Papers', icon: FileText, docs: PAPERS },
   { key: 'recommendations', label: 'Recommendation Materials', icon: Award, docs: RECOMMENDATIONS },
   { key: 'syllabuses', label: 'Syllabuses', icon: GraduationCap, docs: SYLLABI },
+  { key: 'certifications', label: 'Certifications', icon: ShieldCheck, docs: CERTIFICATIONS },
 ] as const
+
+const HONORS = [
+  'CompTIA Security+ (in progress)',
+  'SANS Foundation Cybersecurity Cert.',
+  'Microsoft Cybersecurity Grant Recipient',
+  'NCWIT Award for Computing',
+]
+
+const SKILL_GROUPS = [
+  {
+    title: 'Programming & Systems',
+    items: ['Python', 'Java', 'React / TypeScript', 'Linux', 'VirtualBox / VMware', 'Unreal Engine 5'],
+    wide: true,
+  },
+  {
+    title: 'Cybersecurity & Networking',
+    items: ['Wireshark', 'Cisco Packet Tracer', 'Firewall configuration', 'Vulnerability testing', 'Cryptography fundamentals'],
+    wide: true,
+  },
+  {
+    title: 'Agentic AI',
+    items: ['Kiro (AWS)', 'Replit Agent', 'Prompt engineering', 'AI oversight & cost analysis'],
+    wide: true,
+  },
+  {
+    title: 'Design',
+    items: ['Adobe Photoshop', 'Lightroom', 'Canva', 'UI/UX fundamentals'],
+    wide: false,
+  },
+  {
+    title: 'Languages',
+    items: ['English (fluent)', 'Mandarin Chinese (minor)', 'Korean (NSLI-Y, 2022)'],
+    wide: false,
+  },
+]
 
 /** A document card that starts "classified" (redacted title + stamp) and declassifies
  *  itself shortly after scrolling into view, revealing the real title. PPTX/DOCX files
@@ -342,9 +466,9 @@ function WorkCard({
             &#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;
           </span>
         </span>
-        <span className="block text-sm text-bone/70 mt-1">
+        <span className="block text-base text-bone/70 mt-1">
           {doc.meta}
-          {doc.credit && <span className="block text-bone/50 text-xs mt-0.5">{doc.credit}</span>}
+          {doc.credit && <span className="block text-bone/50 text-sm mt-0.5">{doc.credit}</span>}
         </span>
       </span>
 
@@ -569,17 +693,18 @@ export default function App() {
               </div>
             </div>
             <span className="block w-14 h-px bg-gold mb-6" />
-            <div className="space-y-4 text-charcoal leading-relaxed text-[1.05rem]">
+            <div className="space-y-4 text-charcoal leading-relaxed text-[1.2rem]">
               <p className="drop-cap">
                 Hi, I'm Briannah. I'm a cybersecurity senior at Old Dominion University
                 (3.94 GPA, graduating May 2027), pursuing the accelerated
-                bachelor's-to-master's track with a minor in Mandarin Chinese. I earned
-                my Associate of Science in Computer Science, Natural Science, and
-                Mathematics from Grossmont College (3.48 GPA) before transferring in.
-                Right now I'm a funded researcher with the Coastal Virginia Center for
-                Cyber Innovation, studying what I call Oversight Drift: how much human
-                review is actually left once AI agents start acting on our behalf, and
-                who gets hurt most as that review quietly disappears.
+                bachelor's-to-master's track: a cybersecurity master's with a
+                concentration in AI security, plus a minor in Mandarin Chinese. I
+                earned my Associate of Science in Computer Science, Natural Science,
+                and Mathematics from Grossmont College before transferring in. Right
+                now I'm a funded researcher with the Coastal Virginia Center for Cyber
+                Innovation, studying what I call Oversight Drift: how far AI agents
+                stray from their set rules and policies when oversight is low, and who
+                loses the most when people trust and check them less.
               </p>
               <p>
                 I'm especially drawn to the analytical side of cybersecurity. Digital
@@ -589,8 +714,17 @@ export default function App() {
                 configuration, and vulnerability testing, and currently working toward
                 CompTIA Security+. Outside coursework, I built a VR cyber awareness game
                 that won the GenCyber Scholar Award and an agentic AI housing tool for
-                Teamship Hampton Roads. I like building things people can actually use,
-                not just write about them.
+                Teamship Hampton Roads.
+              </p>
+              <p>
+                I also like building virtualizations that people use to learn. Looking
+                ahead, I want to focus more on language-learning technology. When it
+                comes to Mandarin, there aren't cyber workforce apps out there that
+                teach the language at all, so I want to build that, especially for
+                people like minorities who don't already have that in their lineage.
+                Without ancestors or family already in these fields, people are less
+                likely to even go looking for them, and that head start shouldn't only
+                belong to the people who were born into it.
               </p>
               <p>
                 This portfolio tracks my research, projects, and professional development
@@ -602,13 +736,39 @@ export default function App() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="relative">
-              <div className="aspect-[4/5] overflow-hidden border border-ink/15 shadow-xl bg-paper-soft">
+              <div className="relative aspect-[4/5] overflow-hidden border border-ink/15 shadow-xl bg-paper-soft">
                 <img
                   src="https://sites.wp.odu.edu/briannahgreene/wp-content/uploads/sites/41585/2026/09/YAS02180.jpg"
                   alt="Briannah Greene"
                   className="w-full h-full object-cover grayscale-[15%]"
                 />
+                {/* scanning sweep, like a security-camera readout passing over the frame */}
+                <div className="scan-sweep pointer-events-none absolute inset-x-0 h-1/3 bg-gradient-to-b from-transparent via-gold/50 to-transparent mix-blend-screen" />
               </div>
+              {/* animated marching-ants targeting border */}
+              <svg
+                className="scan-border pointer-events-none absolute -inset-2.5"
+                width="calc(100% + 1.25rem)"
+                height="calc(100% + 1.25rem)"
+                viewBox="0 0 100 125"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="1"
+                  y="1"
+                  width="98"
+                  height="123"
+                  fill="none"
+                  stroke="var(--color-gold)"
+                  strokeWidth="0.6"
+                  strokeDasharray="6 4"
+                />
+              </svg>
+              {/* targeting-reticle corner brackets */}
+              <span className="pointer-events-none absolute -top-3 -left-3 w-7 h-7 border-t-2 border-l-2 border-gold" />
+              <span className="pointer-events-none absolute -top-3 -right-3 w-7 h-7 border-t-2 border-r-2 border-gold" />
+              <span className="pointer-events-none absolute -bottom-3 -right-3 w-7 h-7 border-b-2 border-r-2 border-gold" />
               <Seal className="text-seal w-16 h-16 absolute -bottom-6 -left-6 -rotate-[10deg] bg-paper" />
             </div>
           </Reveal>
@@ -616,60 +776,73 @@ export default function App() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" className="px-6 md:px-12 py-24 md:py-32 bg-ink">
-        <div className="max-w-6xl mx-auto">
+      <section id="skills" className="relative px-6 md:px-12 py-24 md:py-32 bg-ink overflow-hidden">
+        <span className="pointer-events-none select-none absolute -right-6 top-6 font-serif text-[16rem] leading-none text-paper/[0.03] hidden lg:block">
+          02
+        </span>
+        <div className="max-w-6xl mx-auto relative">
           <Reveal className="flex items-baseline gap-4 mb-14">
             <SectionMark n="02" tone="ink" />
             <div>
-              <Eyebrow>Skills &amp; Certifications</Eyebrow>
+              <Eyebrow>Technical Profile</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl font-semibold text-paper">
-                What I bring to the table
+                Skills &amp; Certifications
               </h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
-            {[
-              {
-                title: 'Honors & Certifications',
-                items: [
-                  'CompTIA Security+ (in progress)',
-                  'SANS Foundation Cybersecurity Cert.',
-                  'Microsoft Cybersecurity Grant Recipient',
-                  'NCWIT Award for Computing',
-                ],
-              },
-              {
-                title: 'Programming & Systems',
-                items: ['Python', 'Java', 'React / TypeScript', 'Linux', 'VirtualBox / VMware', 'Unreal Engine 5'],
-              },
-              {
-                title: 'Cybersecurity & Networking',
-                items: ['Wireshark', 'Cisco Packet Tracer', 'Firewall configuration', 'Vulnerability testing', 'Cryptography fundamentals'],
-              },
-              {
-                title: 'Agentic AI',
-                items: ['Kiro (AWS)', 'Replit Agent', 'Prompt engineering', 'AI oversight & cost analysis'],
-              },
-              {
-                title: 'Design',
-                items: ['Adobe Photoshop', 'Lightroom', 'Canva', 'UI/UX fundamentals'],
-              },
-              {
-                title: 'Languages',
-                items: ['English (fluent)', 'Mandarin Chinese (minor)', 'Korean (NSLI-Y, 2022)'],
-              },
-            ].map((group, i) => (
-              <Reveal key={group.title} delay={i * 0.06} className="h-full">
-                <div className="h-full bg-ink p-7">
-                  <span className="block w-8 h-px bg-seal mb-4" />
-                  <h3 className="font-serif text-lg font-semibold text-paper mb-3">
+
+          {/* featured: honors & certifications banner */}
+          <Reveal className="mb-6">
+            <div className="relative border border-gold/40 bg-gradient-to-br from-ink-soft to-ink p-7 md:p-9 overflow-hidden">
+              <span className="pointer-events-none select-none absolute -top-10 -right-6 font-serif text-[9rem] leading-none text-gold/10">
+                &#9733;
+              </span>
+              <div className="flex items-center gap-2 mb-6">
+                <Award className="w-4 h-4 text-gold shrink-0" />
+                <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-gold">
+                  Honors &amp; Certifications
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2.5 relative">
+                {HONORS.map((h, i) => (
+                  <motion.span
+                    key={h}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ delay: i * 0.07, duration: 0.5 }}
+                    className="px-3.5 py-1.5 border border-gold/30 text-paper text-base font-medium bg-ink/40"
+                  >
+                    {h}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* remaining categories, asymmetric bento grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {SKILL_GROUPS.map((group, i) => (
+              <Reveal
+                key={group.title}
+                delay={i * 0.06}
+                className={group.wide ? 'lg:col-span-2' : ''}
+              >
+                <div className="group h-full border border-white/10 bg-ink-soft p-6 hover:border-seal/50 transition-colors">
+                  <span className="block w-8 h-px bg-seal mb-4 group-hover:w-14 transition-all duration-500" />
+                  <h3 className="font-serif text-lg font-semibold text-paper mb-4">
                     {group.title}
                   </h3>
-                  <ul className="space-y-1.5 text-base text-bone/90">
+                  <div className="flex flex-wrap gap-2">
                     {group.items.map((it) => (
-                      <li key={it}>{it}</li>
+                      <span
+                        key={it}
+                        className="px-2.5 py-1 text-sm font-mono tracking-wide text-bone/80 border border-white/10 bg-ink/50"
+                      >
+                        {it}
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -699,7 +872,7 @@ export default function App() {
                   <h3 className="font-serif text-2xl md:text-3xl font-semibold mb-4">
                     Newport News Housing Hub
                   </h3>
-                  <p className="text-bone/85 mb-6 leading-relaxed">
+                  <p className="text-bone/85 mb-6 leading-relaxed text-lg">
                     A full interactive web app for the City of Newport News covering
                     affordable housing, homeownership programs, and neighborhood
                     resources, including an affordability calculator, a neighborhood
@@ -758,14 +931,16 @@ export default function App() {
                 <p className="text-sm text-seal font-semibold mb-3">
                   Funded Research Fellowship &middot; Showcase Dec 2026
                 </p>
-                <p className="text-charcoal/90 text-sm leading-relaxed">
-                  Mentor-guided research asking how much human oversight is actually
-                  left once AI agents start acting on our behalf, work I call Oversight
-                  Drift. Borrowing the idea of a phone's battery health indicator, I'm
-                  building a simple 0 to 100 score: run an agent loop with review at
-                  every step, then again with little or none, and measure what quietly
-                  breaks. Culminating in a paper and presentation at the December 2026
-                  Student Research Showcase.
+                <p className="text-charcoal/90 text-base leading-relaxed">
+                  Mentor-guided research asking: when AI agents act on our behalf, how
+                  far do they drift from the set rules and policies with little
+                  oversight, and who loses the most when people trust and check them
+                  less? I call this work Oversight Drift. Borrowing the idea of a
+                  phone's battery health indicator, I'm building a simple 0 to 100
+                  score: run an agent loop with review at every step, then again with
+                  little or none, and measure what quietly breaks. Culminating in a
+                  paper and presentation at the December 2026 Student Research
+                  Showcase.
                 </p>
               </div>
             </Reveal>
@@ -776,7 +951,7 @@ export default function App() {
                 <p className="text-sm text-seal font-semibold mb-3">
                   GenCyber Scholar Award Winner
                 </p>
-                <p className="text-charcoal/90 text-sm leading-relaxed mb-4">
+                <p className="text-charcoal/90 text-base leading-relaxed mb-4">
                   Independently designed and built a virtual reality cyber-awareness
                   learning game in under two days, using Oculus and Unreal Engine 5.
                   Awarded the Scholar Award, the camp's highest honor.
@@ -854,7 +1029,7 @@ export default function App() {
                       <h3 className="font-serif text-lg font-semibold text-paper">{e.title}</h3>
                     </div>
                     <p className="text-seal text-sm font-semibold mb-2">{e.org}</p>
-                    <p className="text-bone/90 text-base leading-relaxed">{e.desc}</p>
+                    <p className="text-bone/90 text-lg leading-relaxed">{e.desc}</p>
                   </div>
                 </div>
               </Reveal>
@@ -882,7 +1057,7 @@ export default function App() {
                 <p className="text-seal text-sm font-semibold mb-2">
                   Old Dominion University &middot; Expected May 2027
                 </p>
-                <p className="text-charcoal/80 text-sm">
+                <p className="text-charcoal/80 text-base">
                   Minor in Mandarin Chinese &middot; 3.94 GPA &middot; Senior standing
                 </p>
               </div>
@@ -891,15 +1066,16 @@ export default function App() {
                 <p className="text-seal text-sm font-semibold mb-2">
                   Grossmont College &middot; Completed June 2026
                 </p>
-                <p className="text-charcoal/80 text-sm">
-                  Natural Science &amp; Math &middot; 3.48 GPA &middot; STEM Promise
-                  Scholar
+                <p className="text-charcoal/80 text-base">
+                  Natural Science &amp; Math &middot; STEM Promise Scholar
                 </p>
               </div>
             </div>
             <div className="border border-ink/15 bg-paper p-6 mb-8">
               <h3 className="font-serif font-semibold mb-3">Selected Honors &amp; Certifications</h3>
-              <ul className="text-charcoal/85 text-sm space-y-1.5 list-disc list-inside">
+              <ul className="text-charcoal/85 text-base space-y-1.5 list-disc list-inside">
+                <li>STEM Promise Scholar</li>
+                <li>Horatio Scholar</li>
                 <li>CompTIA Security+ (in progress)</li>
                 <li>Microsoft Cybersecurity Grant Recipient (2023)</li>
                 <li>SANS Foundation Cybersecurity Certification (2023)</li>
@@ -925,7 +1101,7 @@ export default function App() {
               <h2 className="font-serif text-3xl md:text-4xl font-semibold text-paper">
                 Works &amp; Documentation
               </h2>
-              <p className="text-bone/70 mt-3 max-w-xl">
+              <p className="text-bone/70 mt-3 max-w-xl text-lg">
                 School papers, presentations, recommendation materials, and course
                 syllabi, all in one place. Click any item to view or download it.
               </p>
@@ -956,15 +1132,69 @@ export default function App() {
             </div>
           </Reveal>
 
-          <div className="grid sm:grid-cols-2 gap-4">
-            {activeWorkTab.docs.map((doc, i) => (
-              <WorkCard key={doc.title} doc={doc} index={i} onPreview={setPreviewDoc} />
-            ))}
-          </div>
+          {activeWorkTab.docs.length > 0 ? (
+            <div className="grid sm:grid-cols-2 gap-4">
+              {activeWorkTab.docs.map((doc, i) => (
+                <WorkCard key={doc.title} doc={doc} index={i} onPreview={setPreviewDoc} />
+              ))}
+            </div>
+          ) : (
+            <div className="border border-dashed border-white/15 text-bone/50 text-sm px-6 py-10 text-center">
+              Certificates coming soon.
+            </div>
+          )}
         </div>
       </section>
 
       <WorkPreviewModal doc={previewDoc} onClose={() => setPreviewDoc(null)} />
+
+      {/* PHOTOGRAPHY */}
+      <section id="photography" className="grain px-6 md:px-12 py-24 md:py-32 bg-paper text-ink">
+        <div className="max-w-5xl mx-auto">
+          <Reveal className="flex items-baseline gap-4 mb-10">
+            <SectionMark n="07" tone="paper" />
+            <div>
+              <Eyebrow>Behind The Lens</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl font-semibold">
+                Photography
+              </h2>
+              <p className="text-charcoal/80 mt-3 max-w-xl text-lg">
+                Outside of security work, I shoot and edit my own photography under YAS
+                Entertainment. Here's a look at the gallery.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <a
+              href="https://www.viewbug.com/member/yasentertainmentonlinenews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative block border border-ink/15 bg-ink text-paper overflow-hidden"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-white/10">
+                <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-gold">
+                  <Camera className="w-4 h-4" /> YAS Entertainment &middot; ViewBug Gallery
+                </span>
+                <span className="text-xs font-bold tracking-[0.1em] uppercase text-gold group-hover:text-gold-soft transition-colors inline-flex items-center gap-1.5">
+                  View Full Gallery <ExternalLink className="w-3.5 h-3.5" />
+                </span>
+              </div>
+              <div className="relative min-h-[280px] md:min-h-[360px] flex flex-col items-center justify-center gap-4 px-6 py-14 text-center">
+                <div className="gold-dust absolute inset-0 opacity-40" />
+                <Camera className="w-10 h-10 text-gold relative" />
+                <p className="relative max-w-md text-paper/80 text-base leading-relaxed">
+                  My photography lives on ViewBug, not here. Click through to browse
+                  the full gallery.
+                </p>
+                <span className="relative inline-flex items-center gap-2 px-5 py-2.5 border border-gold text-gold text-xs font-bold tracking-[0.1em] uppercase group-hover:bg-gold group-hover:text-ink transition-colors">
+                  Visit the Gallery <ExternalLink className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </a>
+          </Reveal>
+        </div>
+      </section>
 
       {/* CONTACT */}
       <section id="contact" className="relative px-6 md:px-12 py-28 md:py-36 bg-ink overflow-hidden">
@@ -975,13 +1205,21 @@ export default function App() {
             <h2 className="font-serif text-3xl md:text-4xl font-semibold mb-5 text-paper">
               Let's build something secure
             </h2>
-            <p className="max-w-xl text-bone/80 mb-8">
+            <p className="max-w-xl text-bone/80 mb-8 text-lg">
               Open to internships, research collaborations, and conversations about
               security analysis, threat intelligence, and digital forensics.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a href="mailto:bgree045@odu.edu" className={btnPrimary}>
                 <Mail className="w-4 h-4" /> bgree045@odu.edu
+              </a>
+              <a
+                href="https://www.linkedin.com/in/briannah-greene-725197169"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={btnOutlineDark}
+              >
+                <Link2 className="w-4 h-4" /> LinkedIn
               </a>
               <a
                 href="https://github.com/bree16"
