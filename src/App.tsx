@@ -1050,17 +1050,36 @@ export default function App() {
                 <p className="text-sm text-seal font-semibold mb-3">
                   Funded Research Fellowship &middot; Showcase Dec 2026
                 </p>
-                <p className="text-charcoal/90 text-base leading-relaxed">
+                <p className="text-charcoal/90 text-base leading-relaxed mb-4">
                   Mentor-guided research asking: when AI agents act on our behalf, how
                   far do they drift from the set rules and policies with little
                   oversight, and who loses the most when people trust and check them
                   less? I call this work Oversight Drift. Borrowing the idea of a
-                  phone's battery health indicator, I'm building a simple 0 to 100
-                  score: run an agent loop with review at every step, then again with
-                  little or none, and measure what quietly breaks. Culminating in a
-                  paper and presentation at the December 2026 Student Research
-                  Showcase.
+                  phone's battery health indicator, I built the Oversight Drift
+                  Calculator, a Python prototype that walks ChatGPT through 24 steps
+                  of a novice building an automation, with real problems hidden in
+                  half of them, and scores 0 to 100 how often it says a wrong step is
+                  correct. Culminating in a paper and presentation at the December
+                  2026 Student Research Showcase.
                 </p>
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {['Python', 'OpenAI API', 'AI Safety', 'Human-in-the-Loop'].map((t) => (
+                    <span
+                      key={t}
+                      className="px-3 py-1 border border-ink/15 text-xs font-medium text-charcoal/80"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href="https://github.com/bree16/Oversight-Drift-Calc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={btnPrimary}
+                >
+                  <FolderGit2 className="w-4 h-4" /> View Code
+                </a>
               </div>
             </Reveal>
             <Reveal delay={0.08}>
